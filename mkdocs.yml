@@ -1,0 +1,16 @@
+site_name: Deep Learning pickers
+
+nav:
+    - Home: 'index.md'
+    - Datasets:
+        - El Hierro: 'datasets/hierro.md'
+        - CASTOR: 'datasets/castor.md'
+        - Maupasacq: 'datasets/maupasacq.md'
+    - Pickers:
+        - GPD: 'pickers/gpd.md'
+        - PhaseNet: 'pickers/phasenet.md'
+        - EQTransformer: 'pickers/eqtransformer.md'
+        - PickNet: 'pickers/picknet.md'
+    - About: 'about.md'
+
+theme: readthedocs

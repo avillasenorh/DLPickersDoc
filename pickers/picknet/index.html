@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>PickNet - Deep Learning pickers</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "PickNet";
+    var mkdocs_page_input_path = "pickers/picknet.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Deep Learning pickers</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Datasets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/hierro/">El Hierro</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/castor/">CASTOR</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/maupasacq/">Maupasacq</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pickers</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../gpd/">GPD</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../phasenet/">PhaseNet</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../eqtransformer/">EQTransformer</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">PickNet</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#download-waveform-data-files">Download waveform data files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#waveform-pre-processing">Waveform pre-processing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#picking">Picking</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#post-processing">Post-processing</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Deep Learning pickers</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Pickers &raquo;</li>
+        
+      
+    
+    <li>PickNet</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="picknet">PickNet</h1>
+<p>Wang, J., Xiao, Z., Liu, C., Zhao, D., &amp; Yao, Z. (2019). Deep Learning for
+Picking Seismic Arrival Times. Journal of Geophysical Research: Solid Earth,
+124(7), 6612–6624, doi:<a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2019JB017536">10.1029/2019JB017536</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>According to the manual, the installation can be done with conda:</p>
+<pre><code class="console">$ conda create -n picknet python=3.6 tensorflow=1.8 cudatoolkit=X.X pyyaml matplotlib
+</code></pre>
+
+<p>However, this produces an error. We have tried this alternative:</p>
+<pre><code class="console">$ conda create -n picknet python=3.6
+$ conda activate picknet
+$ conda install -c conda-forge obspy       # this also installs matplotlib
+$ conda install pyyaml
+$ conda install pyproj                     # needed for gen_input_for_pick.py
+$ pip install tensorflow==1.8
+
+$ conda install numpy==1.16.2              # gen_tomo_arrivals_inputfile_p_s.py does not work with 1.19.5
+</code></pre>
+
+<p>We did not include the <code>cudatoolkit</code> option because we are testing the code in a
+computer without a NVIDA GPU.</p>
+<h2 id="download-waveform-data-files">Download waveform data files</h2>
+<p>The first step in the tutorial is to download waveform data from IRIS. For this we need
+a list of events to extract (catalog), a list of stations, and a way to request the waveform
+data to the data center. This is done with the script <code>download_data.py</code> located in the
+directory <code>PickingDataFromIRISExample</code>:</p>
+<pre><code class="console">$ cd PickingDataFromIRISExample
+$ python download_data.py
+</code></pre>
+
+<p><strong>NOTE:</strong> directory <code>ori_data/events</code> must exist before running the script, but can be
+empty (<code>catalog.xml</code> is created by the script). The other directories <code>ori_data/stations</code> and
+<code>ori_data/waveforms</code> are created by the script.</p>
+<p>Running this script produces the following files:</p>
+<ul>
+<li><code>ori_data/events/catalog.xml</code>: catalog file in <a href="https://quake.ethz.ch/quakeml/">QuakeML</a> format.</li>
+<li><code>ori_data/stations/NET.STA.xml</code>: station files in <a href="https://www.fdsn.org/xml/station/">StationXML</a> format.
+   <code>NET</code> indicates the network code, and <code>STA</code> the station code (e.g. <code>BK.YBH.xml</code>).</li>
+<li><code>ori_data/waveforms/En/*.mseed</code>: waveform files in miniSEED format. <code>En</code> is the directory
+   that contains the waveform data for event number <code>n</code> in <code>catalog.xml</code>. The waveform files <code>*.mseed</code>
+   have names such as: <code>UW.BST17..HHZ__20190623T223810Z__20190623T224910Z.mseed</code></li>
+</ul>
+<p>The event number <code>n</code> starts with 0. Running this script (as of 2021-01-22), it
+obtains only 5 events, with the corresponding event directories <code>E0</code> to <code>E4</code>. 
+Apparently when the script was created, it obtained 6 events. This will produce
+a problem in the script of the following step because the number of events it expects (6) is
+hard-wired in the code.</p>
+<p>There seems to be an additional off-by-one logic problem in the scripts, because some output files
+contain the prefix <code>E0_E6_</code> indicating that there are 7 events, from index 0 to 6, while in reality
+the test data contains 6 events, with indices from 0 to 5 (or 5 event with indices from 0 to 4
+in we re-run the data extraction script in 2021).</p>
+<p>If we change the value of <code>end_e</code> to 5, then the script runs correctly, and generates the 
+preprocessed files in directory <code>input_output</code>, some with prefixes <code>E0_E5_</code> (which should be <code>E0_E4_</code>).</p>
+<h2 id="waveform-pre-processing">Waveform pre-processing</h2>
+<p>The next step is to prepare the extracted raw waveforms for picking. This pre-processing
+consists of 3 steps:</p>
+<ol>
+<li>Rotate the horizontal components to radial and transverse</li>
+<li>Cut the waveforms to 12 s windowns centered on the theoretical P wave arrival
+   for the vertical component and 16 s windows centered on the theoretical S wave arrival
+   for the radial and transverse components.</li>
+<li>Remove the mean and normalize by the absolute value of the maximum amplitude.</li>
+</ol>
+<p>(The order of these steps is not clear, need to check the source code) </p>
+<pre><code class="console">$ python gen_input_for_pick.py
+</code></pre>
+
+<p>This script generates its output files in the directory <code>input_output</code>.</p>
+<p>First it generates the P and S time windows and writes them in <code>NumPy</code> binary format,
+in the directories <code>P_slices</code> and <code>S_slices</code> respectively, with a subdirectory
+for each event:</p>
+<ul>
+<li><code>P_slices/E?/input.npy</code></li>
+<li><code>P_slices/E?/sta_info.npy</code></li>
+<li><code>S_slices/E?/input.npy</code></li>
+<li><code>S_slices/E?/sta_info.npy</code></li>
+</ul>
+<p>Then it combines the data from all the events into a single <code>NumPy</code> binary file, located
+in the directories <code>P_input</code> and <code>S_input</code>:</p>
+<ul>
+<li><code>P_input/E0_E6_info.npy</code></li>
+<li><code>P_input/E0_E6_input.npy</code></li>
+<li><code>S_input/E0_E6_RT_info.npy</code></li>
+<li><code>S_input/E0_E6_RT_input.npy</code></li>
+</ul>
+<p>As mentioned before, if we try to run this script with data extracted in 2021 it crashes.
+The problem is that it expects 6 event directories (from <code>E0</code> to <code>E5</code>),
+and the download script <code>download_data.py</code> only produced 5 event directorioes
+(from <code>E0</code> to <code>E4</code>).</p>
+<p>To make the script run correctly with 5 events, we need to edit line 406 in
+<code>gen_input_for_pick.py</code> and set the variable <code>end_e</code> to 5.</p>
+<pre><code class="python">if __name__ == '__main__':
+    print('START PROCESSING')
+    start_e = 0
+    end_e = 5    # originally set to 6
+</code></pre>
+
+<h2 id="picking">Picking</h2>
+<p>In order to run the phase picking, two parameter files are needed inside the directory
+<code>input_output</code>: <code>P_config.yaml</code> and <code>S_config.yaml</code>.</p>
+<p>These files contains parameters for the training, etc. For the picking, the most relevant
+difference between both files is the trained model to use. Here is the contents of <code>P_config.yaml</code>:</p>
+<pre><code># location of snapshot and tensorbaord summary events
+save_dir: fcn/trained_models/P_wave/
+# training batch size, decide with your GPU size
+batch_size_train: 20
+# validation batch size, ran every val_interval
+batch_size_val: 20
+# test batch size
+batch_size_test: 2000
+# split training data for trainig/validation
+train_split: 0.95
+# maximum iterations to run epoc == 30k/batch_size
+max_iterations: 800005
+# optimizer params (not used currently Adam is used by default)
+optimizer: 'adam'
+optimizer_params:
+    learning_rate: 0.001
+    weight_decay: 0.0002
+# Loss for layer fusion
+loss_weights: 1.0
+# save snapshot every save_interval iterations
+save_interval: 1000
+# validate on held out dataset
+val_interval: 1000
+# print loss every print_interval
+print_interval: 100
+# learning rate decay (Not used with Adam currently)
+learning_rate_decay: 0.1
+# Apply weighted_cross_entropy_loss to outputs from each side layer
+# Setting to false only loss after last conv layer is computed
+deep_supervision: True
+# Targets are continous if True else binary {0, 1}
+target_regression: True
+
+training:
+    filename: NOT_FOR_TRAINING
+    #
+    length_before: 400
+    data_width: 1200
+    data_height: 1
+    n_channels: 1
+    trace_per_collect: 4
+    rand_dev: 300
+# testing data
+testing:
+    filename: PickingDataFromIRISExample/input_output/P_input/E0_E6_input
+    data_width: 1200
+    data_height: 1
+    n_channels: 1
+    limit_left: 300
+    limit_right: 900 
+# use snapshot after test_snapshot intervals for testing
+test_snapshot: 330000
+# Apply testing_threshold after relu
+testing_threshold: 0.0
+#available choices: HED, SRN, PickNet
+using_model: PickNet
+#block1 conv size
+b1_convh: 1
+b1_convw: 32
+#block2 conv size
+b2_convh: 1
+b2_convw: 16
+#block3 conv size
+b3_convh: 1
+b3_convw: 8
+#block4 conv size
+b4_convh: 1
+b4_convw: 4
+#block5 conv size
+b5_convh: 1
+b5_convw: 2
+</code></pre>
+
+<p>The parameter <code>testing: filename</code> contains the <code>E0_E6_input</code> prefix. If we pick a different number of
+events, this parameter has to be changed.</p>
+<p>To run the picking go to the parent directory of the repository and type:</p>
+<pre><code class="console">$ cd ..
+
+$ python seismic_pick_run.py --test \
+  --config-file PickingDataFromIRISExample/input_output/P_config.yaml # for P waves
+
+$ python seismic_pick_run.py --test \
+  --config-file PickingDataFromIRISExample/input_output/S_config.yaml # for S waves
+</code></pre>
+
+<p>These scripts will produce the following files inside the directory <code>PickingDataFromIRISExample</code>:</p>
+<p>For P waves:</p>
+<ul>
+<li><code>input_output/P_input/E0_E6_input_fuse_picks.npy</code></li>
+<li><code>input_output/P_input/E0_E6_input_output.npy</code></li>
+</ul>
+<p>For S waves:</p>
+<ul>
+<li><code>input_output/S_input/E0_E6_RT_input_fuse_picks.npy</code></li>
+<li><code>input_output/S_input/E0_E6_RT_input_output.npy</code></li>
+</ul>
+<h2 id="post-processing">Post-processing</h2>
+<p>The output of the picking script <code>seismic_pick_run.py</code> are files in <code>NumPy</code> binary format. To obtain
+the picks in readable form and see plots of the results we need to run additional scripts.
+First we need to run:</p>
+<pre><code class="console">$ cd PickingDataFromIRISExample
+$ python ViewAndGatherP.py input_output/P_input E0_E6_ 1         # for P waves
+$ python ViewAndGatherS.py input_output/S_input E0_E6_RT_ 1      # for S waves
+</code></pre>
+
+<p>These two scripts produce the following output files.</p>
+<p>For P waves:</p>
+<ul>
+<li><code>P_input/E0_E6_msta_input.npy</code></li>
+<li><code>P_input/E0_E6_View/En.png</code> : png files for each event n</li>
+</ul>
+<p>For S waves:</p>
+<ul>
+<li><code>S_input/E0_E6_RT_msta_input.npy</code></li>
+<li><code>S_input/E0_E6_RT_View/En.png</code> : png files for each event n</li>
+</ul>
+<p>Except for the <code>png</code>files, the results are in <code>NumPy</code> binary format and therefore
+not yet in human readable format. In order to convert the output to text format we
+have to run the following script:</p>
+<pre><code class="console">$ python gen_tomo_arrivals_inputfile_p_s.py 'input_output/P_input/' 'input_output/S_input/' 'txt_pickfile/' IRIS
+</code></pre>
+
+<p>This script will create a directory named <code>txt_pickfile</code> with
+the following files:</p>
+<ul>
+<li><code>txt_pickfile/IRISdata_code_dict.npy</code></li>
+<li><code>txt_pickfile/IRISpicks.txt</code></li>
+</ul>
+<p>However, the script in its original form does not work, giving the following error:</p>
+<pre><code>  File &quot;gen_tomo_arrivals_inputfile_p_s.py&quot;, line 34, in &lt;module&gt;
+    picks_dict = np.load(str(pickfile))[()]
+  File &quot;/Users/antonio/opt/anaconda3/envs/picknet/lib/python3.6/site-packages/numpy/lib/npyio.py&quot;, line 440, in load
+    pickle_kwargs=pickle_kwargs)
+  File &quot;/Users/antonio/opt/anaconda3/envs/picknet/lib/python3.6/site-packages/numpy/lib/format.py&quot;, line 727, in read_array
+    raise ValueError(&quot;Object arrays cannot be loaded when &quot;
+ValueError: Object arrays cannot be loaded when allow_pickle=False
+</code></pre>
+
+<p>This error occurs in the following line:</p>
+<pre><code class="python">    for pickfile in picks_dir.glob('*_msta_input.npy'):
+        picks_dict = np.load(str(pickfile))[()]
+</code></pre>
+
+<p>This seems to be related to the <code>NumPy</code> version. The version originally installed is 1.19.5.
+Downgrading <code>NumPy</code> to 1.16.2 (<code>conda install numpy==1.16.2</code>) fixes the issue.
+This also eliminates most of the warnings produced when running <code>seismic_pick_run.py</code>.</p>
+<p>One final step is to generate the station list:</p>
+<pre><code class="console">$ python gen_tomo_stations_inputfile.py 'ori_data/stations/' 'txt_pickfile/'
+</code></pre>
+
+<p>This script produces the following output:</p>
+<ul>
+<li><code>txt_pickfile/stations.txt</code></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../eqtransformer/" class="btn btn-neutral" title="EQTransformer"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../eqtransformer/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../about/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

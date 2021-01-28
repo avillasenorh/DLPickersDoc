@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>FilterPicker - Deep Learning pickers</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "FilterPicker";
+    var mkdocs_page_input_path = "pickers/filterpicker.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Deep Learning pickers</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Datasets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/hierro/">El Hierro</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/castor/">CASTOR</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../datasets/maupasacq/">Maupasacq</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pickers</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">FilterPicker</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run">Run</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#codes-and-results-in-artemisa">Codes and results in Artemisa</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gpd/">GPD</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../phasenet/">PhaseNet</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../eqtransformer/">EQTransformer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../picknet/">PickNet</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Comparison</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../metrics/">Metrics</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../results/">Results</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Deep Learning pickers</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Pickers &raquo;</li>
+        
+      
+    
+    <li>FilterPicker</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="filterpicker">FilterPicker</h1>
+<p>Lomax, A., Satriano, C., &amp; Vassallo, M. (2012). Automatic Picker Developments
+and Optimization: FilterPicker-a Robust, Broadband Picker for Real-Time Seismic
+Monitoring and Earthquake Early Warning. Seismological Research Letters, 83(3),
+531–540, doi:<a href="http://doi.org/10.1785/gssrl.83.3.531">10.1785/gssrl.83.3.531</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>Download software <a href="http://alomax.free.fr/FilterPicker/">(C version)</a> and compile.</p>
+<p>FilterPicker executable is called <code>picker_func_test</code>.</p>
+<h2 id="run">Run</h2>
+<p>FilterPicker takes two arguments:</p>
+<ol>
+<li>Input file in SAC format</li>
+<li>Output file name </li>
+</ol>
+<pre><code class="console">$ picker_func_test ES.CTAB..EHZ.D.2011.300 ES.CTAB..EHZ.D.2011.300.pick
+</code></pre>
+
+<p>The output file has the format of the location code <a href="http://alomax.free.fr/nlloc/">NonLinLoc</a>:</p>
+<pre><code>CTAB   -12345 EHZ  ? P0_    + 20110922 0013   15.7600 GAU 6.000e-02 0.000e+00 1.188e+01 6.400e-01
+CTAB   -12345 EHZ  ? P1_    ? 20110922 0019   40.3100 GAU 1.000e-02 0.000e+00 1.874e+01 1.000e-02
+CTAB   -12345 EHZ  ? P2_    - 20110922 0023   11.7600 GAU 5.000e-02 0.000e+00 1.151e+01 1.600e-01
+CTAB   -12345 EHZ  ? P3_    - 20110922 0031   22.3400 GAU 4.000e-02 0.000e+00 1.120e+01 3.200e-01
+CTAB   -12345 EHZ  ? P4_    + 20110922 0038   57.8799 GAU 8.000e-02 0.000e+00 1.030e+01 6.400e-01
+CTAB   -12345 EHZ  ? P5_    + 20110922 0100   23.5599 GAU 2.000e-02 0.000e+00 1.005e+01 8.000e-02
+CTAB   -12345 EHZ  ? P6_    ? 20110922 0112   26.7699 GAU 1.000e-02 0.000e+00 1.639e+01 8.000e-02
+CTAB   -12345 EHZ  ? P7_    + 20110922 0121   24.9399 GAU 4.000e-02 0.000e+00 1.223e+01 1.600e-01
+CTAB   -12345 EHZ  ? P8_    - 20110922 0134   19.6099 GAU 4.000e-02 0.000e+00 1.014e+01 1.600e-01
+</code></pre>
+
+<p>The meaning of the columns is:</p>
+<ul>
+<li>Station name: station name or code (char*6)</li>
+<li>Instrument: instument identification for the trace for which the time pick
+  corresponds (i.e. SP, BRB, VBB) -12345 means <code>UNDEFINED</code> (char*4)</li>
+<li>Component: component identification for the trace for which the time pick
+  corresponds (i.e. Z, N, E, H) (char *4)</li>
+<li>P phase onset (char*1)
+description of P phase arrival onset; i, e</li>
+<li>Phase descriptor (char*6)</li>
+<li>Phase identification (i.e. P, S, PmP)</li>
+<li>First Motion: first motion direction of P arrival; c, C, u, U = compression;
+  d, D = dilatation; +, -, Z, N; . or ? = not readable (char*1)</li>
+<li>Date (yyyymmdd) (int*6)</li>
+<li>Hour/minute (hhmm) (int*4)</li>
+<li>Seconds: seconds of phase arrival (float*7.4)</li>
+<li>Err: Error/uncertainty type; GAU (char*3)</li>
+<li>ErrMag: Error/uncertainty magnitude in seconds (expFloat*9.2)</li>
+<li>Coda duration: coda duration reading (expFloat*9.2)</li>
+<li>Amplitude: Maxumim peak-to-peak amplitude (expFloat*9.2)</li>
+<li>Period: Period of amplitude reading (expFloat*9.2)</li>
+</ul>
+<pre><code class="bash">#!/bin/bash
+
+set -u # error if variable undefined
+set -o pipefail
+
+arcdir=/Lake/arclink
+
+year=2017
+day1=60
+day2=299
+
+net=XD
+
+for ((day = $day1; day &lt;= $day2; day++ )); do
+
+    jday=$( printf &quot;%03d&quot; $day)
+
+    daydir=$year.$jday
+    mkdir $daydir
+    cd $daydir
+    echo &quot;&quot;
+    echo &quot;&quot;
+    echo &quot;Processing $daydir&quot;
+    /bin/rm -f mseed.list
+    find  $arcdir/$year/$net -name &quot;$net.*.$year.$jday&quot; -print &gt; mseed.list
+    while read -r msfile; do
+        /bin/rm -f *.SAC sac.list
+        echo &quot;&quot;
+        filename=${msfile##*/}
+        echo $filename
+        mseed2sac $msfile
+
+        /bin/ls -1 *.SAC &gt; sac.list 2&gt; /dev/null
+        nsac=$( cat sac.list | wc -l )
+
+        if [[ $nsac -eq 0 ]]; then
+            echo &quot;ERROR: no SAC files obtained from $filename&quot;
+        elif [[ $nsac -eq 1 ]]; then
+            sacfile=$( head -1 sac.list )
+            picker_func_test $sacfile $filename.pick
+        else
+            echo &quot;WARNING: multiple SAC files for $filename&quot;
+            (( nfile = 1 ))
+            for sacfile in *.SAC; do
+                npts=$( saclhdr -NPTS $sacfile )
+                if [[ $npts -gt 75000 ]]; then
+                   picker_func_test $sacfile temp.$nfile.pick
+                else
+                   echo &quot;WARNING: segment too small: $sacfile $npts&quot;
+                fi
+                (( nfile++ ))
+            done
+            cat temp.[0-9]*.pick | sort -n -k7 -k8 -k9 &gt; $filename.pick
+            /bin/rm -f temp.[0-9]*.pick
+        fi
+
+        /bin/rm -f *.SAC sac.list
+    done &lt; mseed.list
+    /bin/rm -f mseed.list
+    cd ..
+
+done
+</code></pre>
+
+<h2 id="codes-and-results-in-artemisa">Codes and results in Artemisa</h2>
+<p>The previous script <code>loop_lomax_picker.sh</code> is located in <code>~ific0331/scripts</code></p>
+<p>The FilterPicker executable <code>picker_func_test</code> is located in <code>~ific0331/bin</code></p>
+<p>The utility program <code>mseed2sac</code> is also located in <code>ific0331/bin</code></p>
+<p>The output of running FilterPicker for the El Hierro dataset is stored in
+<code>/lustre/ific.uv.es/ml/ific033/data/Hierro/FilterPicker</code>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../gpd/" class="btn btn-neutral float-right" title="GPD">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../datasets/maupasacq/" class="btn btn-neutral" title="Maupasacq"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../datasets/maupasacq/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../gpd/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

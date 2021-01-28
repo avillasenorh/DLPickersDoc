@@ -7,10 +7,14 @@ nav:
         - CASTOR: 'datasets/castor.md'
         - Maupasacq: 'datasets/maupasacq.md'
     - Pickers:
+        - FilterPicker: 'pickers/filterpicker.md'
         - GPD: 'pickers/gpd.md'
         - PhaseNet: 'pickers/phasenet.md'
         - EQTransformer: 'pickers/eqtransformer.md'
         - PickNet: 'pickers/picknet.md'
+    - Comparison: 
+        - Metrics: 'metrics.md'
+        - Results: 'results.md'
     - About: 'about.md'
 
 theme: readthedocs

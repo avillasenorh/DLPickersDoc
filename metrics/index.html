@@ -124,12 +124,23 @@
               
                 <h1 id="metrics">Metrics</h1>
 <p>Comparison of results from DL pickers with ground truth (high-quality picks).</p>
+<p>True positives (<script type="math/tex">t_p</script>) are picks done by the Deep Learning picker that coincide
+within a small time difference (<script type="math/tex">\Delta t < \epsilon</script>) with the picks from the
+labelled dataset (e.g. refined IGN picks for El Hierro pre-eruption or CASTOR
+sequence).</p>
+<p>True negatives (<script type="math/tex">t_n</script>)</p>
 <p>Comparison metrics that we will use are:</p>
-<p>where $\t_p\$ are true positives</p>
-<p>(E = mc^2) yields E=mc2
-\begin{math} 
-E = mc^2
-\end{math}</p>
+<p>
+<script type="math/tex; mode=display"> Precision = { t_p \over {t_p + f_p} } ,</script>
+</p>
+<p>
+<script type="math/tex; mode=display"> Recall = { t_p \over {t_p + f_n} } ,</script>
+</p>
+<!--
+$$ F_1 = { 2 \times {{Precision \times Recall} \over {Precision + Recall}} } $$
+
+where \(t_p\) are true positives, \(f_p\) are false positives, and \(f_n\) are false negatives.
+-->
               
             </div>
           </div>
@@ -175,6 +186,7 @@ E = mc^2
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../search/main.js" defer></script>
     <script defer>
         window.onload = function () {

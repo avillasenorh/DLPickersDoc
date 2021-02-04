@@ -17,4 +17,10 @@ nav:
         - Results: 'results.md'
     - About: 'about.md'
 
+extra_javascript:
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+    - mdx_math
+
 theme: readthedocs

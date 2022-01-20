@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../../css/theme.css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -25,9 +25,8 @@
   
   <script src="../../js/jquery-2.1.1.min.js" defer></script>
   <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,7 +40,7 @@
         <a href="../.." class="icon icon-home"> Deep Learning pickers</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -129,6 +128,7 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
@@ -138,11 +138,10 @@ Picking Seismic Arrival Times. Journal of Geophysical Research: Solid Earth,
 124(7), 6612–6624, doi:<a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2019JB017536">10.1029/2019JB017536</a>.</p>
 <h2 id="installation">Installation</h2>
 <p>According to the manual, the installation can be done with conda:</p>
-<pre><code class="console">$ conda create -n picknet python=3.6 tensorflow=1.8 cudatoolkit=X.X pyyaml matplotlib
+<pre><code class="language-console">$ conda create -n picknet python=3.6 tensorflow=1.8 cudatoolkit=X.X pyyaml matplotlib
 </code></pre>
-
 <p>However, this produces an error. We have tried this alternative:</p>
-<pre><code class="console">$ conda create -n picknet python=3.6
+<pre><code class="language-console">$ conda create -n picknet python=3.6
 $ conda activate picknet
 $ conda install -c conda-forge obspy       # this also installs matplotlib
 $ conda install pyyaml
@@ -151,7 +150,6 @@ $ pip install tensorflow==1.8
 
 $ conda install numpy==1.16.2              # gen_tomo_arrivals_inputfile_p_s.py does not work with 1.19.5
 </code></pre>
-
 <p>We did not include the <code>cudatoolkit</code> option because we are testing the code in a
 computer without a NVIDA GPU.</p>
 <h2 id="download-waveform-data-files">Download waveform data files</h2>
@@ -159,10 +157,9 @@ computer without a NVIDA GPU.</p>
 a list of events to extract (catalog), a list of stations, and a way to request the waveform
 data to the data center. This is done with the script <code>download_data.py</code> located in the
 directory <code>PickingDataFromIRISExample</code>:</p>
-<pre><code class="console">$ cd PickingDataFromIRISExample
+<pre><code class="language-console">$ cd PickingDataFromIRISExample
 $ python download_data.py
 </code></pre>
-
 <p><strong>NOTE:</strong> directory <code>ori_data/events</code> must exist before running the script, but can be
 empty (<code>catalog.xml</code> is created by the script). The other directories <code>ori_data/stations</code> and
 <code>ori_data/waveforms</code> are created by the script.</p>
@@ -197,9 +194,8 @@ consists of 3 steps:</p>
 <li>Remove the mean and normalize by the absolute value of the maximum amplitude.</li>
 </ol>
 <p>(The order of these steps is not clear, need to check the source code) </p>
-<pre><code class="console">$ python gen_input_for_pick.py
+<pre><code class="language-console">$ python gen_input_for_pick.py
 </code></pre>
-
 <p>This script generates its output files in the directory <code>input_output</code>.</p>
 <p>First it generates the P and S time windows and writes them in <code>NumPy</code> binary format,
 in the directories <code>P_slices</code> and <code>S_slices</code> respectively, with a subdirectory
@@ -224,12 +220,11 @@ and the download script <code>download_data.py</code> only produced 5 event dire
 (from <code>E0</code> to <code>E4</code>).</p>
 <p>To make the script run correctly with 5 events, we need to edit line 406 in
 <code>gen_input_for_pick.py</code> and set the variable <code>end_e</code> to 5.</p>
-<pre><code class="python">if __name__ == '__main__':
+<pre><code class="language-python">if __name__ == '__main__':
     print('START PROCESSING')
     start_e = 0
     end_e = 5    # originally set to 6
 </code></pre>
-
 <h2 id="picking">Picking</h2>
 <p>In order to run the phase picking, two parameter files are needed inside the directory
 <code>input_output</code>: <code>P_config.yaml</code> and <code>S_config.yaml</code>.</p>
@@ -307,11 +302,10 @@ b4_convw: 4
 b5_convh: 1
 b5_convw: 2
 </code></pre>
-
 <p>The parameter <code>testing: filename</code> contains the <code>E0_E6_input</code> prefix. If we pick a different number of
 events, this parameter has to be changed.</p>
 <p>To run the picking go to the parent directory of the repository and type:</p>
-<pre><code class="console">$ cd ..
+<pre><code class="language-console">$ cd ..
 
 $ python seismic_pick_run.py --test \
   --config-file PickingDataFromIRISExample/input_output/P_config.yaml # for P waves
@@ -319,7 +313,6 @@ $ python seismic_pick_run.py --test \
 $ python seismic_pick_run.py --test \
   --config-file PickingDataFromIRISExample/input_output/S_config.yaml # for S waves
 </code></pre>
-
 <p>These scripts will produce the following files inside the directory <code>PickingDataFromIRISExample</code>:</p>
 <p>For P waves:</p>
 <ul>
@@ -335,11 +328,10 @@ $ python seismic_pick_run.py --test \
 <p>The output of the picking script <code>seismic_pick_run.py</code> are files in <code>NumPy</code> binary format. To obtain
 the picks in readable form and see plots of the results we need to run additional scripts.
 First we need to run:</p>
-<pre><code class="console">$ cd PickingDataFromIRISExample
+<pre><code class="language-console">$ cd PickingDataFromIRISExample
 $ python ViewAndGatherP.py input_output/P_input E0_E6_ 1         # for P waves
 $ python ViewAndGatherS.py input_output/S_input E0_E6_RT_ 1      # for S waves
 </code></pre>
-
 <p>These two scripts produce the following output files.</p>
 <p>For P waves:</p>
 <ul>
@@ -354,9 +346,8 @@ $ python ViewAndGatherS.py input_output/S_input E0_E6_RT_ 1      # for S waves
 <p>Except for the <code>png</code>files, the results are in <code>NumPy</code> binary format and therefore
 not yet in human readable format. In order to convert the output to text format we
 have to run the following script:</p>
-<pre><code class="console">$ python gen_tomo_arrivals_inputfile_p_s.py 'input_output/P_input/' 'input_output/S_input/' 'txt_pickfile/' IRIS
+<pre><code class="language-console">$ python gen_tomo_arrivals_inputfile_p_s.py 'input_output/P_input/' 'input_output/S_input/' 'txt_pickfile/' IRIS
 </code></pre>
-
 <p>This script will create a directory named <code>txt_pickfile</code> with
 the following files:</p>
 <ul>
@@ -372,19 +363,16 @@ the following files:</p>
     raise ValueError(&quot;Object arrays cannot be loaded when &quot;
 ValueError: Object arrays cannot be loaded when allow_pickle=False
 </code></pre>
-
 <p>This error occurs in the following line:</p>
-<pre><code class="python">    for pickfile in picks_dir.glob('*_msta_input.npy'):
+<pre><code class="language-python">    for pickfile in picks_dir.glob('*_msta_input.npy'):
         picks_dict = np.load(str(pickfile))[()]
 </code></pre>
-
 <p>This seems to be related to the <code>NumPy</code> version. The version originally installed is 1.19.5.
 Downgrading <code>NumPy</code> to 1.16.2 (<code>conda install numpy==1.16.2</code>) fixes the issue.
 This also eliminates most of the warnings produced when running <code>seismic_pick_run.py</code>.</p>
 <p>One final step is to generate the station list:</p>
-<pre><code class="console">$ python gen_tomo_stations_inputfile.py 'ori_data/stations/' 'txt_pickfile/'
+<pre><code class="language-console">$ python gen_tomo_stations_inputfile.py 'ori_data/stations/' 'txt_pickfile/'
 </code></pre>
-
 <p>This script produces the following output:</p>
 <ul>
 <li><code>txt_pickfile/stations.txt</code></li>
@@ -422,17 +410,18 @@ This also eliminates most of the warnings produced when running <code>seismic_pi
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href="../eqtransformer/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../../metrics/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../eqtransformer/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../metrics/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
     <script src="../../js/theme.js" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>

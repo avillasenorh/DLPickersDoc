@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../../css/theme.css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -25,9 +25,8 @@
   
   <script src="../../js/jquery-2.1.1.min.js" defer></script>
   <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,7 +40,7 @@
         <a href="../.." class="icon icon-home"> Deep Learning pickers</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -125,6 +124,7 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
@@ -137,7 +137,7 @@ doi:<a href="http://www.nature.com/articles/s41467-020-17591-w">10.1038/s41467-0
 <p>The installation instructions for <code>EQTransformer</code> are found
 <a href="https://eqtransformer.readthedocs.io/en/latest/installation.html">here</a>.</p>
 <p>The installation in Artemisa was done using <code>venv</code>:</p>
-<pre><code class="console">$ git clone -b master https://git.csic.es/seismicai/eqtransformer.git
+<pre><code class="language-console">$ git clone -b master https://git.csic.es/seismicai/eqtransformer.git
 $ cd eqtransformer
 
 $ python3 -m venv .venv
@@ -146,7 +146,6 @@ $ pip install --upgrade pip
 $ pip install tensorflow &quot;h5py&lt;3.0.0&quot;
 $ pip install EQTransformer -U
 </code></pre>
-
 <p>When installing <code>TensorFlow</code> it is important that the version of the
 required package <code>h5py</code> is smaller than 3. Higher versions are not
 compatible with <code>EQTransformer</code>.</p>
@@ -188,17 +187,18 @@ compatible with <code>EQTransformer</code>.</p>
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href="../phasenet/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../picknet/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../phasenet/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../picknet/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
     <script src="../../js/theme.js" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>

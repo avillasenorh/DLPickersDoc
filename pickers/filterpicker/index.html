@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../../css/theme.css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -25,9 +25,8 @@
   
   <script src="../../js/jquery-2.1.1.min.js" defer></script>
   <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,7 +40,7 @@
         <a href="../.." class="icon icon-home"> Deep Learning pickers</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -125,6 +124,7 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
@@ -142,9 +142,8 @@ Monitoring and Earthquake Early Warning. Seismological Research Letters, 83(3),
 <li>Input file in SAC format</li>
 <li>Output file name </li>
 </ol>
-<pre><code class="console">$ picker_func_test ES.CTAB..EHZ.D.2011.300 ES.CTAB..EHZ.D.2011.300.pick
+<pre><code class="language-console">$ picker_func_test ES.CTAB..EHZ.D.2011.300 ES.CTAB..EHZ.D.2011.300.pick
 </code></pre>
-
 <p>The output file has the format of the location code <a href="http://alomax.free.fr/nlloc/">NonLinLoc</a>:</p>
 <pre><code>CTAB   -12345 EHZ  ? P0_    + 20110922 0013   15.7600 GAU 6.000e-02 0.000e+00 1.188e+01 6.400e-01
 CTAB   -12345 EHZ  ? P1_    ? 20110922 0019   40.3100 GAU 1.000e-02 0.000e+00 1.874e+01 1.000e-02
@@ -156,7 +155,6 @@ CTAB   -12345 EHZ  ? P6_    ? 20110922 0112   26.7699 GAU 1.000e-02 0.000e+00 1.
 CTAB   -12345 EHZ  ? P7_    + 20110922 0121   24.9399 GAU 4.000e-02 0.000e+00 1.223e+01 1.600e-01
 CTAB   -12345 EHZ  ? P8_    - 20110922 0134   19.6099 GAU 4.000e-02 0.000e+00 1.014e+01 1.600e-01
 </code></pre>
-
 <p>The meaning of the columns is:</p>
 <ul>
 <li>Station name: station name or code (char*6)</li>
@@ -179,7 +177,7 @@ description of P phase arrival onset; i, e</li>
 <li>Amplitude: Maxumim peak-to-peak amplitude (expFloat*9.2)</li>
 <li>Period: Period of amplitude reading (expFloat*9.2)</li>
 </ul>
-<pre><code class="bash">#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 
 set -u # error if variable undefined
 set -o pipefail
@@ -242,7 +240,6 @@ for ((day = $day1; day &lt;= $day2; day++ )); do
 
 done
 </code></pre>
-
 <h2 id="codes-and-results-in-artemisa">Codes and results in Artemisa</h2>
 <p>The previous script <code>loop_lomax_picker.sh</code> is located in <code>~ific0331/scripts</code></p>
 <p>The FilterPicker executable <code>picker_func_test</code> is located in <code>~ific0331/bin</code></p>
@@ -282,17 +279,18 @@ done
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href="../../datasets/maupasacq/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../gpd/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../datasets/maupasacq/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../gpd/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
     <script src="../../js/theme.js" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>

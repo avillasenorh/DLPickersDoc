@@ -79,6 +79,14 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#new-output">New output</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scripts-for-batch-processing">Scripts for batch processing</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#data-extraction">Data extraction</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run-phasenet-for-all-miniseed-files-in-a-directory">Run phasenet for all miniSEED files in a directory</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../eqtransformer/">EQTransformer</a>
@@ -197,8 +205,8 @@ phase: 2020-10-19 19:53:09.600000000   0   CA.CMAS..HHZ  None   None   None   P 
 phase: 2020-10-19 19:53:19.370000000   0   CA.CMAS..HHN  None   None   None   S            None   False
 </code></pre>
 <h2 id="new-output">New output</h2>
-<p>```
-file_name,begin_time,station_id,phase_index,phase_time,phase_score,phase_type
+<p>New <code>csv</code> output file now writes times in ISO 8601 format, so there is no need for conversion.</p>
+<pre><code>file_name,begin_time,station_id,phase_index,phase_time,phase_score,phase_type
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,18021,2019-07-04T17:03:00.208,0.956,P
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,24742,2019-07-04T17:04:07.418,0.838,P
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,30658,2019-07-04T17:05:06.578,0.78,P
@@ -215,7 +223,240 @@ CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,25121,2019-07-04T17:04:11.208,0.629,
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,31022,2019-07-04T17:05:10.218,0.309,S
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,31401,2019-07-04T17:05:14.008,0.815,S
 CCC.mseed,2019-07-04T16:59:59.998,CCC.mseed,35681,2019-07-04T17:05:56.808,0.537,S
-...</p>
+...
+</code></pre>
+<h2 id="scripts-for-batch-processing">Scripts for batch processing</h2>
+<h3 id="data-extraction">Data extraction</h3>
+<pre><code class="language-bash">$ sfile_extract_all.sh sfile destination_directory
+</code></pre>
+<pre><code>#!/bin/bash
+#: Title       : se_sfile_wf_extract.sh
+#: Purpose     : Reads a hypocenter defined in an S-file, extracts all the waveform
+#+               data available in a SeisComP directory structure (SDS) and runs
+#+               PhaseNet for the extracted miniSEED files.
+#: Usage       : se_sfile_wf_extract.sh S-file SDS_dir
+#: Date        : 2021-03-26
+#: Author      : &quot;Antonio Villasenor&quot; &lt;antonio.villasenor@csic.es&gt;
+#: Version     : 1.0
+#: Requirements: awk
+#+               GNU date command (not macOS date)
+#+               dataselect (https://github.com/iris-edu/dataselect)
+#+               run.py (PhaseNet prediction script)
+#: IMPORTANT!! : if PhaseNet is installed using a Python virtual environment
+#+               (venv or conda) it must be activated before running this script
+#: Arguments   : S-file SDS-dir
+#: Options     : none
+set -euo pipefail
+
+progname=${0##*/}
+
+[[ $# -lt 2 ]] &amp;&amp; { echo &quot;usage: $progname sfile dest_dir&quot;; exit 1; }
+
+[[ ! -s $1 ]] &amp;&amp; { echo &quot;ERROR: S-file does not exist: $1&quot;; exit 1; }
+[[ ! -d $2 ]] &amp;&amp; { echo &quot;ERROR: destination directory does not exist: $2&quot;; exit 1; }
+
+sfile=&quot;$1&quot;
+dest_dir=&quot;$2&quot;
+
+if command -v date &gt; /dev/null &amp;&amp; date --version &gt; /dev/null 2&gt;&amp;1; then
+    DATE=date
+elif command -v gdate &gt; /dev/null &amp;&amp; gdate --version &gt; /dev/null 2&gt;&amp;1; then
+    DATE=gdate
+else
+    echo &quot;ERROR: no GNU date command in this system&quot;
+    exit 1
+fi
+
+[[ $( command -v dataselect ) ]] || { echo &quot;ERROR: dataselect executable is missing&quot;; exit 1; }
+
+pre_event=30
+post_event=210
+
+origin_time=$(awk '/1$/ { \
+    year =   1*substr($0,2,4); \
+    month =  1*substr($0,7,2); \
+    day =    1*substr($0,9,2); \
+    hour =   1*substr($0,12,2); \
+    minute = 1*substr($0,14,2); \
+    second = 1*substr($0,17,4); \
+    printf(&quot;%4d-%02d-%02dT%02d:%02d:%04.1f&quot;,year,month,day,hour,minute,second); \
+}' $sfile)
+
+year=${origin_time%%-*}
+jday=$($DATE -u --date=&quot;$origin_time&quot; +%j)
+event_dir=$($DATE -u --date=&quot;$origin_time&quot; +%Y.%j.%H%M%S)
+out_dir=$dest_dir/$year/$event_dir
+[[ -d $out_dir ]] &amp;&amp; { echo &quot;WARNING: event $sfile already processed in $out_dir&quot;; exit 1; }
+
+seconds=$($DATE -u --date=&quot;$origin_time&quot; +%s)
+start_time=$(bc -l &lt;&lt;&lt; &quot;$seconds - $pre_event&quot;)
+end_time=$(bc -l &lt;&lt;&lt; &quot;$seconds + $post_event&quot;)
+
+ts=$($DATE -u --date=&quot;@$start_time&quot; +%Y,%j,%H,%M,%S,%N)
+te=$($DATE -u --date=&quot;@$end_time&quot; +%Y,%j,%H,%M,%S,%N)
+
+echo &quot; &quot;
+echo Processing $sfile
+echo Origin time: $origin_time t_start: $ts t_end: $te
+
+# /home/antonio/atlantico/RAW_DATA2/IBERIA 
+#sds=( /tank/PYROPE /tank/IBERARRAY /tank/SISCAN /tank/MISTERIOS /home/antonio/atlantico/PROCESSED_DATA/IBERIA )
+sds=( /tank/GEOMARGEN3 /home/antonio/atlantico/PROCESSED_DATA/IBERIA )
+
+/bin/rm -f mseed.list
+touch mseed.list
+
+for datadir in &quot;${sds[@]}&quot;; do
+    [[ -d $datadir/SDS/$year ]] &amp;&amp; find $datadir/SDS/$year -name &quot;*.[BEHS]?Z.?.$year.$jday&quot; -print &gt;&gt; mseed.list
+done
+
+[[ ! -s mseed.list ]] &amp;&amp; { echo &quot;ERROR: no miniSEED files for $sfile&quot;; /bin/rm -f mseed.list; exit 1; }
+
+mkdir -p $out_dir
+cp $sfile $out_dir/.
+$DATE -u --date=&quot;@$start_time&quot; +%Y-%m-%dT%H:%M:%S.%N &gt; $out_dir/start_time.txt
+
+start_string=$($DATE -u --date=&quot;@$start_time&quot; +%Y-%m-%dT%H%M%SZ)
+end_string=$($DATE -u --date=&quot;@$end_time&quot; +%Y-%m-%dT%H%M%SZ)
+
+while read -r zfile; do
+
+   filename=${zfile##*/}        # miniSEED file withouth path: GS.CA06.00.HHZ.D.2019.003
+   prefix=${filename::-12}      # GS.CA06.00.HH
+   dum=${filename#*.}           # CA06.00.HHZ.D.2019.003
+   sta=${dum%%.*}               # CA06
+   zcmp=${zfile:(-14):5}        # HHZ
+   ecmp=${zcmp/Z/E}             # HHE
+   ncmp=${zcmp/Z/N}             # HHN
+   h1=${zfile//$zcmp/$ecmp}     # /full_path/GS.CA06.00.HHE.D.2019.003
+   h2=${zfile//$zcmp/$ncmp}     # /full_path/GS.CA06.00.HHN.D.2019.003
+
+   [[ -s $zfile ]] &amp;&amp; dataselect -ts $ts -te $te -lso -Pe -o $out_dir/${prefix}Z__${start_string}__${end_string}.mseed $zfile
+   [[ -s $h1 ]]    &amp;&amp; dataselect -ts $ts -te $te -lso -Pe -o $out_dir/${prefix}E__${start_string}__${end_string}.mseed $h1
+   [[ -s $h2 ]]    &amp;&amp; dataselect -ts $ts -te $te -lso -Pe -o $out_dir/${prefix}N__${start_string}__${end_string}.mseed $h2
+
+done &lt; mseed.list
+
+/bin/mv mseed.list $out_dir/.
+
+#nfiles=$( cat $out_dir/fname.csv | wc -l )
+#[[ $nfiles -lt 2 ]] &amp;&amp; { echo &quot;ERROR: no data for $sfile&quot;; /bin/rm -rf $out_dir; exit 1; }
+</code></pre>
+<h3 id="run-phasenet-for-all-miniseed-files-in-a-directory">Run phasenet for all miniSEED files in a directory</h3>
+<pre><code class="language-bash">$ event_pn_pick_new.sh $event_directory $destination_directory
+</code></pre>
+<pre><code>#!/bin/bash
+#: Title       : se_sfile_wf_extract.sh
+#: Purpose     : Reads a hypocenter defined in an S-file, extracts all the waveform
+#+               data available in a SeisComP directory structure (SDS) and runs
+#+               PhaseNet for the extracted miniSEED files.
+#: Usage       : se_sfile_wf_extract.sh S-file SDS_dir
+#: Date        : 2021-03-26
+#: Author      : &quot;Antonio Villasenor&quot; &lt;antonio.villasenor@csic.es&gt;
+#: Version     : 1.0
+#: Requirements: awk
+#+               GNU date command (not macOS date)
+#+               dataselect (https://github.com/iris-edu/dataselect)
+#+               run.py (PhaseNet prediction script)
+#: IMPORTANT!! : if PhaseNet is installed using a Python virtual environment
+#+               (venv or conda) it must be activated before running this script
+#: Arguments   : S-file SDS-dir
+#: Options     : none
+set -euo pipefail
+
+progname=${0##*/}
+
+[[ $# -lt 2 ]] &amp;&amp; { echo &quot;usage: $progname event_dir dest_dir&quot;; exit 1; }
+
+[[ ! -d $1 ]] &amp;&amp; { echo &quot;ERROR: event directory does not exist: $1&quot;; exit 1; }
+[[ ! -d $2 ]] &amp;&amp; { echo &quot;ERROR: destination directory does not exist: $2&quot;; exit 1; }
+
+datadir=&quot;$1&quot;
+destdir=&quot;$2&quot;
+eventdir=${datadir##*/extract/}
+
+if command -v date &gt; /dev/null &amp;&amp; date --version &gt; /dev/null 2&gt;&amp;1; then
+    DATE=date
+elif command -v gdate &gt; /dev/null &amp;&amp; gdate --version &gt; /dev/null 2&gt;&amp;1; then
+    DATE=gdate
+else
+    echo &quot;ERROR: no GNU date command in this system&quot;
+    exit 1
+fi
+
+pn_dir=${HOME}/repos/PhaseNet
+model=${pn_dir}/model/190703-214543
+
+[[ ! -d $pn_dir ]] &amp;&amp; { echo &quot;ERROR: invalid directory for PhaseNet repo: $pn_dir&quot;; exit 1; }
+[[ ! -d $model ]] &amp;&amp; { echo &quot;ERROR: PhaseNet model does not exist: $model&quot;; exit 1; }
+
+# ES.ELOR.00.HHZ__2020-12-26T121519Z__2020-12-26T121919Z.mseed
+/bin/ls -1 $datadir/*__*Z__*Z.mseed &gt; mseed.list.$$
+nfiles=$( cat mseed.list.$$ | wc -l )
+
+[[ $nfiles -eq 0 ]] &amp;&amp; { echo &quot;ERROR: no miniSEED files in $datadir&quot;; /bin/rm -f mseed.list.$$; exit 1; }
+
+awk -F/ '{print $NF}' mseed.list.$$ | awk -F_ '{print substr($1,1,length($1)-1)}' - | sort -u &gt; streams.list.$$
+
+curdir=$PWD
+outdir=$destdir/$eventdir
+[[ -d $outdir ]] &amp;&amp; { echo &quot;Output event directory already exists: $outdir&quot;; /bin/rm -f *.list.$$; exit 1; }
+mkdir -p $outdir
+cp $datadir/*L.S?????? $outdir/.
+echo &quot;fname,E,N,Z&quot; &gt; $outdir/fname.csv
+
+while read -r stream; do
+
+    /bin/rm -f tmp.$$
+    grep &quot;${stream}[ENZ12]&quot; mseed.list.$$ &gt; tmp.$$
+    n_channels=$( cat tmp.$$ | wc -l )
+
+    if [[ $n_channels -eq 3 ]]; then
+
+        printf &quot;%s&quot; $stream.mseed &gt;&gt; $outdir/fname.csv
+        while read -r cmpfile; do
+
+            cat $cmpfile &gt;&gt; $outdir/$stream.mseed
+
+            fname=${cmpfile##*/}     # ES.ERTA..HHE__2005-02-15T014307Z__2005-02-15T014707Z.mseed ES.ERTA..HHE
+            cmpname=${fname%%__*}    # ES.ERTA..HHE
+            cmp=${cmpname##*.}       # HHE
+            printf &quot;,%s&quot; $cmp &gt;&gt; $outdir/fname.csv
+
+        done &lt; tmp.$$
+        printf &quot;\n&quot; &gt;&gt; $outdir/fname.csv
+
+    elif [[ $n_channels -eq 1 ]]; then
+        echo only one component for $stream $n_channels
+        /bin/rm -f tmp.$$
+        continue
+    else
+        echo unusual number of components for $stream : $n_channels
+        /bin/rm -f tmp.$$
+        continue
+    fi
+    /bin/rm -f tmp.$$
+
+done &lt; streams.list.$$
+
+/bin/rm -f mseed.list.$$ streams.list.$$
+
+nfiles=$( cat $outdir/fname.csv | wc -l )
+[[ $nfiles -lt 2 ]] &amp;&amp; { echo &quot;ERROR: no stations for $eventdir&quot;; /bin/rm -rf $outdir; exit 1; }
+
+cd $pn_dir
+#timeout 10m \
+python phasenet/predict.py --model=model/190703-214543 \
+                           --data_list=${outdir}/fname.csv \
+                           --data_dir=${outdir} \
+                           --result_dir=${outdir}/phasenet \
+                           --format=mseed --plot_figure &gt; $outdir/phasenet.log 2&gt;&amp;1
+
+#cd $outdir
+#pnout2picks.sh
+
+cd $curdir
+</code></pre>
               
             </div>
           </div>
